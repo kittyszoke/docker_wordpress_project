@@ -1,0 +1,29 @@
+version: "3"
+services:
+  database_askj:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: <password>
+      MYSQL_DATABASE: <db>
+      MYSQL_USER: <user>
+      MYSQL_PASSWORD: <password>
+    volumes:
+      - mysql:/var/lib/mysql
+
+  wordpress_askj:
+    depends_on:
+      - database_askj
+    image: 172.31.35.135:5000/askj/wordpress:latest
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      WORDPRESS_DB_HOST: <rds_endpoint>
+      WORDPRESS_DB_USER: <username>
+      WORDPRESS_DB_PASSWORD: <password>
+      WORDPRESS_DB_NAME: <db_name>
+    volumes:
+      ["./:/var/www/html"]
+volumes:
+  mysql: {}
